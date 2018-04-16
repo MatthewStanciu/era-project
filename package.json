@@ -1,15 +1,16 @@
 {
-  "name":"era-project",
-  "version":"1.0.0",
-  "description":"Era project that simulates the 1970s economy",
-  "main":"script.js",
-  "author":"Matthew Stanciu",
-  "private":false,
+  "name": "era-project",
+  "version": "1.0.0",
+  "description": "Era project that simulates the 1970s economy",
+  "main": "server.js",
+  "author": "Matthew Stanciu",
+  "private": false,
   "scripts": {
-    "start":"node script.js"
+    "start": "node server.js"
   },
   "dependencies": {
-      "express": "^4.16.3",
-      "socket.io": "^2.1.0"
-    }
+    "express": "^4.16.3",
+    "mongodb": "^3.0.6",
+    "socket.io": "^2.1.0"
+  }
 }
