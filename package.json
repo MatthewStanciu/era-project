@@ -9,7 +9,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "ajax": "0.0.4",
+    "ajax": "^0.0.4",
     "express": "^4.16.3",
     "mongodb": "^3.0.6",
     "socket.io": "^2.1.0"
