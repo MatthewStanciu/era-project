@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+    <script>
+      var keypresses = "";
+      $(document).keypress(function(e){
+        if(e.key == "Enter"){
+          console.log(keypresses);
+          keypresses = "";
+        }else{
+          keypresses+=e.key;
+        }
+      });
+    </script>
+  </body>
+</html>
