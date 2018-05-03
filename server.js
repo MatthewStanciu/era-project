@@ -4,12 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
 const r = require('rethinkdb');
-let parseRethinkDB = require('parse-rethinkdb-url');
 
 app.use('/public', express.static('public'));
-
-let connectionString = process.env.COMPOSE_RETHINKDB_URL;
-let options = parseRethinkDB(connectionString);
 
 //connect to Compose deployment of RethinkDB
 fs.readFile('./cacert', function(err, caCert) {

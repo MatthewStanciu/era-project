@@ -12,7 +12,6 @@
     "ajax": "^0.0.4",
     "express": "^4.16.3",
     "socket.io": "^2.1.0",
-    "rethinkdb": "^2.3.3",
-    "parse-rethinkdb-url": "^0.0.1"
+    "rethinkdb": "^2.3.3"
   }
 }
