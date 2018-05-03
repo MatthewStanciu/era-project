@@ -15,7 +15,7 @@ let options = parseRethinkDB(connectionString);
 fs.readFile('./cacert', function(err, caCert) {
   r.connect({
     host: process.env.COMPOSE_HOST,
-    port: 16314,
+    port: process.env.COMPOSE_HOST_PORT,
     authKey: process.env.AUTH_KEY,
     ssl: {
       ca: caCert
