@@ -14,7 +14,7 @@ let options = parseRethinkDB(connectionString);
 //connect to Compose deployment of RethinkDB
 fs.readFile('./cacert', function(err, caCert) {
   r.connect({
-    host: 'aws-us-east-1-portal.14.dblayer.com',
+    host: process.env.COMPOSE_HOST,
     port: 16314,
     authKey: process.env.AUTH_KEY,
     ssl: {
