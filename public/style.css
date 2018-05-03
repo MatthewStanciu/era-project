@@ -1,0 +1,52 @@
+h1 {
+  color: gold;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Helvetica Neue', Roboto, 'Segoe UI', sans-serif;
+  font-size:90px;
+  left: 0;
+  line-height:200px;
+  margin: auto;
+  margin-top:-100px;
+  position:absolute;
+  text-align:center;
+  top:20%;
+  width:100%;
+}
+body {
+  color: orange;
+  background-color: #8c42f4;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Helvetica Neue', Roboto, 'Segoe UI', sans-serif;
+  font-size:12px;
+  left:0;
+  line-height:200px;
+  margin:auto;
+  margin-top:-100px;
+  position:absolute;
+  text-align:center;
+  top:60%;
+  width:100%;
+}
+#bal h1 {
+    opacity: 0;
+    font-size: 90px;
+    margin-top: -100px;
+    text-align: center;
+}
+input[type=text] {
+    width: 15%;
+    height: 11px;
+    padding: 10px 20px;
+    border: 2px solid gold;
+    border-radius: 4px;
+}
+.button {
+  background-color: #EDCD00;
+  border: none;
+  color: black;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}

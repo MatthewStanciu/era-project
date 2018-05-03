@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RFID Input</title>
+    <meta charset="utf-8"/>
+    <link href="/public/style.css" rel="stylesheet">
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">a</script>
+  </head>
+  <body style="background-color:#8c42f4;">
+    <h1>RFID Input</h1>
+    <script>
+      var keypresses = "";
+      $(document).keypress(function(e){
+        if(e.key == "Enter"){
+          console.log(keypresses);
+          keypresses = "";
+        }else{
+          keypresses+=e.key;
+        }
+      });
+    </script>
+  </body>
+</html>

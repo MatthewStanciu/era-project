@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The 1970s</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/public/style.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id="content">
+      <form action="" id="f">
+        <input id="m" name="name" type="text" maxlength="100" placeholder="Enter your name">
+        <button type="submit" id="submit-data" class="button">Submit</button>
+      </form>
+      <div id="bal">
+        <h1 id="b"></h1>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <script>
+      $(function() {
+        var socket = io();
+        var name = ""
+        $("form").submit(function() {
+          socket.emit('name', $("#m").val());
+          $("#m").val('');
+          return false;
+        });
+        socket.on('balance', function(bal) {
+          $("#b").text("$" + bal);
+          $("#bal h1").delay(300).animate({ opacity: 1 }, 500);
+          $("#f").hide();
+        });
+      });
+    </script>
+  </body>
+</html>
