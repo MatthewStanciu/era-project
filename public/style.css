@@ -1,7 +1,7 @@
 h1 {
   color: gold;
   font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Helvetica Neue', Roboto, 'Segoe UI', sans-serif;
-  font-size:90px;
+  font-size:85px;
   left: 0;
   line-height:200px;
   margin: auto;
@@ -27,7 +27,7 @@ body {
 }
 #bal h1 {
     opacity: 0;
-    font-size: 90px;
+    font-size: 85px;
     margin-top: -100px;
     text-align: center;
 }
