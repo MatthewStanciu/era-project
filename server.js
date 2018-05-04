@@ -19,13 +19,12 @@ fs.readFile('./cacert', function(err, caCert) {
   }, function(error, conn) {
     if (error) throw error;
     io.on('connection', function(socket) {
-      console.log("a user connected");
+      console.log("connected");
       socket.on('name', function(data) {
         r.db('eraproject').table('students').filter({"name" : data}).pluck("balance").run(conn, function(err, cursor) {
           if (err) throw err;
           cursor.toArray(function(err, result) {
             if (err) throw err;
-            console.log(data);
             socket.emit('balance', result[0].balance);
           });
         });
