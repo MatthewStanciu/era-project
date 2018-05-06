@@ -4,17 +4,23 @@
     <title>State Change</title>
     <meta charset="utf-8"/>
     <link href="/public/style.css" rel="stylesheet">
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"></script>
   </head>
-  <body style="background-color:#8c42f4;">
-    <form action="/input.html" method="post">
-      <div>
-        <label for="name">State</label>
-        <input type="text" id="name" name="state">
-      </div>
+  <body style="background-color:#6fb235;">
+    <form action="" id="f">
+      <input id="s" name="state" type="text" maxlength="100" placeholder="State" autofocus>
+      <button type="submit" id="submit-data" class="button">Submit</button>
     </form>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <script>
+      $(function() {
+        var socket = io();
+        $("form").submit(function() {
+          socket.emit('state', $("#s").val());
+          $("#s").val('');
+          return false;
+        });
+      });
+    </script>
   </body>
 </html>
