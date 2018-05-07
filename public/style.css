@@ -24,6 +24,7 @@ body {
   text-align:center;
   top:60%;
   width:100%;
+  transition: background-color 1s;
 }
 #bal h1 {
   opacity: 0;
