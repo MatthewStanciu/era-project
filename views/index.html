@@ -31,6 +31,7 @@
         });
         socket.on('balance', function(bal) {
           $("body").css("background-color","#8c42f4");
+          $("#bal h1").css("color", "gold");
           if (bal < 1) {
             $("#b").text("You have died");
             $("body").css("background-color","#e02c2c");
@@ -38,15 +39,11 @@
           else if (bal >= 100000000) {
             $("#b").text("You have been arrested");
             $("body").css("background-color", "#f4b342");
-            $("body").css("color", "green");
+            $("#bal h1").css("color", "#71a3f2");
           }
           else $("#b").text("$" + bal);
           $("#bal h1").delay(300).animate({ opacity: 1 }, 500);
           $("#f").hide();
-        });
-        socket.on('jail', function(message) {
-          $("body").css("background-color","#f4b342");
-          $("#b").text("");
         });
       });
     </script>

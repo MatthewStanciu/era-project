@@ -4,8 +4,6 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var stateFile = './state.json';
 var state = require(stateFile);
-var timerFile = './timer.json';
-var timer = require(timerFile);
 var fs = require('fs');
 const r = require('rethinkdb');
 
@@ -29,7 +27,7 @@ fs.readFile('./cacert', function(err, caCert) {
           if (err) throw err;
           cursor.toArray(function(err, result) {
             if (err) throw err;
-            console.log(data);
+            console.log(data + " connected");
             socket.emit('balance', result[0].balance);
           });
         });
@@ -59,22 +57,36 @@ fs.readFile('./cacert', function(err, caCert) {
           if (err) throw err;
           var currentState = JSON.parse(state);
           console.log(currentState);
-          if (currentState["currentstate"] == "pay-50000") pay50000(data);
-          else if (currentState["currentstate"] == "pay-100000") pay100000(data);
-          else if (currentState["currentstate"] == "watch-deepthroat") pay5(data);
-          //else if(currentState["currentstate"] == "update-income") livingCosts(data);
+          //could probably benefit from a switch case here but whatever
+          if (currentState["currentstate"] == "watch-deepthroat") pay5(data);
           else if(currentState["currentstate"] == "kill") kill(data);
           else if(currentState["currentstate"] == "jail")  {
             jail(data);
-            setTimeout(pushBalance, 3000, data);
+            setTimeout(pushBalance, 300000, data);
           }
           else if(currentState["currentstate"] == "protest-vietnam") protestVietnam(data);
           else if(currentState["currentstate"] == "draft") draft(data);
           else if(currentState["currentstate"] == "find-horsehead") findHorsehead(data);
           else if(currentState["currentstate"] == "answer-question") answerQuestion(data);
           else if(currentState["currentstate"] == "update-balances") livingCosts(data);
+          else if(currentState["currentstate"] == "update-income") livingCosts(data);
+          else if(currentState["currentstate"] == "invest-borders") investBorders(data);
+          else if(currentState["currentstate"] == "return-borders") returnBorders(data);
+          else if(currentState["currentstate"] == "invest-starbucks") investStarbucks(data);
+          else if(currentState["currentstate"] == "return-starbucks") returnStarbucks(data);
+          else if(currentState["currentstate"] == "invest-freelandia") investFreelandia(data);
+          else if(currentState["currentstate"] == "return-freelandia") returnFreelandia(data);
+          else if(currentState["currentstate"] == "invest-oracle") investOracle(data);
+          else if(currentState["currentstate"] == "return-oracle") returnOracle(data);
+          else if(currentState["currentstate"] == "invest-fedex") investFedex(data);
+          else if(currentState["currentstate"] == "return-fedex") returnFedex(data);
+          else if(currentState["currentstate"] == "great-inflation") unemploy(data);
+          else if(currentState["currentstate"] == "end-great-inflation") employ(data);
+          else if(currentState["currentstate"] == "fine") fine(data);
         });
       });
+
+
 
       function pushBalance(studentid) {
         r.db('eraproject').table('students').get(studentid).pluck("balance").run(conn, function(err, result) {
@@ -136,48 +148,141 @@ fs.readFile('./cacert', function(err, caCert) {
         else console.log(studentid + " lived!")
       }
 
-      function shuffleArray(array) {
-          var currentIndex = array.length, temporaryValue, randomIndex;
-          while (0 !== currentIndex) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-          }
-      }
-
       function draft(studentid) {
         r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
           if (result.name == "Shaheer" || result.name == "Bryson") kill(studentid);
         });
       }
 
-      function getIncome(studentid) {
+      function investBorders(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({sharesborders:r.row("sharesborders").add(10)}).run(conn, function(err, result) {
+          if (err) throw err;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-120)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " bought 10 borders shares");
+          });
+        });
+      }
+      function returnBorders(studentid) {
+        console.log(studentid + " made a bad investment decision: Borders!");
         r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
           if (err) throw err;
-          return result.income;
+          r.db('eraproject').table('students').get(studentid).update({sharesborders:r.row("sharesborders").add(-result.sharesborders)}).run(conn, function(err, result) {
+            if (err) throw err;
+          });
+        });
+      }
+
+      function investFedex(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({sharesfedex:r.row("sharesfedex").add(10)}).run(conn, function(err, result) {
+          if (err) throw err;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-240)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " bought 10 fedex shares");
+          });
+        });
+      }
+      function returnFedex(studentid) {
+        r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
+          if (err) throw err;
+          var shares = result.sharesfedex;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(240 * result.sharesfedex)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " got $" + (240*shares) + " in fedex returns!");
+            r.db('eraproject').table('students').get(studentid).update({sharesfedex:r.row("sharesfedex").add(-shares)}).run(conn, function(err, result) {
+              if (err) throw err;
+            });
+          });
+        });
+      }
+
+      function investFreelandia(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({sharesfreelandia:r.row("sharesfreelandia").add(10)}).run(conn, function(err, result) {
+          if (err) throw err;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-210)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " bought 10 freelandia shares");
+          });
+        });
+      }
+      function returnFreelandia(studentid) {
+        console.log(studentid + " made a bad investment decision: Freelandia!");
+        r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
+          if (err) throw err;
+          r.db('eraproject').table('students').get(studentid).update({sharesfreelandia:r.row("sharesfreelandia").add(-result.sharesfreelandia)}).run(conn, function(err, result) {
+            if (err) throw err;
+          });
+        });
+      }
+
+      function investStarbucks(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({sharesstarbucks:r.row("sharesstarbucks").add(10)}).run(conn, function(err, result) {
+          if (err) throw err;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-170)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " bought 10 starbucks shares");
+          });
+        });
+      }
+      function returnStarbucks(studentid) {
+        r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
+          if (err) throw err;
+          var shares = result.sharesstarbucks;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(170 * result.sharesstarbucks)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " got $" + (170*shares) + " in starbucks returns!");
+            r.db('eraproject').table('students').get(studentid).update({sharesstarbucks:r.row("sharesstarbucks").add(-shares)}).run(conn, function(err, result) {
+              if (err) throw err;
+            });
+          });
+        });
+      }
+
+      function investOracle(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({sharesoracle:r.row("sharesoracle").add(10)}).run(conn, function(err, result) {
+          if (err) throw err;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-150)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " bought 10 oracle shares");
+          });
+        });
+      }
+      function returnOracle(studentid) {
+        r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
+          if (err) throw err;
+          var shares = result.sharesoracle;
+          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(150 * result.sharesoracle)}).run(conn, function(err, result) {
+            if (err) throw err;
+            console.log(studentid + " got $" + (150*shares) + " in oracle returns!");
+            r.db('eraproject').table('students').get(studentid).update({sharesoracle:r.row("sharesoracle").add(-shares)}).run(conn, function(err, result) {
+              if (err) throw err;
+            });
+          });
         });
       }
 
       function findHorsehead(studentid) {
-        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(1000)}).run(conn, function(err, result) {
+        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(5000)}).run(conn, function(err, result) {
           if (err) throw err;
-          console.log("gave $1000 to " + studentid);
+          console.log("gave 5000 to " + studentid);
+          pushBalance(studentid);
         });
       }
 
       function answerQuestion(studentid) {
-        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(500)}).run(conn, function(err, result) {
+        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(1000)}).run(conn, function(err, result) {
           if (err) throw err;
           console.log("gave $1000 to " + studentid);
+          pushBalance(studentid);
         });
       }
 
-      function getPay(studentid) {
-        r.db('eraproject').table('students').get(studentid).run(conn, function(err, result) {
+      //fine those who kill Vietnamese civilians during the final activity
+      function fine(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-500)}).run(conn, function(err, result) {
           if (err) throw err;
-          return result.pay;
+          console.log("fined " + studentid + " for killing a civilian!");
+          pushBalance(studentid);
         });
       }
 
@@ -190,21 +295,14 @@ fs.readFile('./cacert', function(err, caCert) {
         });
       }
 
-      function pay50000(studentid) {
-        var bal = 0;
-        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-50000)}).run(conn, function(err, result) {
-          if (err) throw err;
-          console.log("removed 50000 from " + studentid);
-          pushBalance(studentid);
+      function employ(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({unemployed:"false"}).run(conn, function(err, result) {
+          console.log("Removed unemployment status from " + studentid);
         });
       }
-
-      function pay100000(studentid) {
-        var bal = 0;
-        r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-100000)}).run(conn, function(err, result) {
-          if (err) throw err;
-          console.log("removed 100000 from " + studentid);
-          pushBalance(studentid);
+      function unemploy(studentid) {
+        r.db('eraproject').table('students').get(studentid).update({unemployed:"true"}).run(conn, function(err, result) {
+          console.log("Added unemployment status to " + studentid);
         });
       }
 
@@ -213,36 +311,21 @@ fs.readFile('./cacert', function(err, caCert) {
           if (err) throw err;
           var newIncome = result.income - result.pay;
           console.log(newIncome);
-          r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(newIncome)}).run(conn, function(err, result) {
-            if (err) throw err;
-            console.log("added income to " + studentid);
-            pushBalance(studentid);
-          });
+          if (result.unemployed == "true") {
+            r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(-newIncome)}).run(conn, function(err, result) {
+              if (err) throw err;
+              console.log(studentid + " is unemployed, so removed income");
+              pushBalance(studentid);
+            });
+          }else {
+            r.db('eraproject').table('students').get(studentid).update({balance:r.row("balance").add(newIncome)}).run(conn, function(err, result) {
+              if (err) throw err;
+              console.log("added income to " + studentid);
+              pushBalance(studentid);
+            });
+          }
         });
       }
-
-      /*function updateLivingCosts() { //doesn't work -- i have no idea what it's doing but it's like running it a bunch of times when it's called
-        r.db('eraproject').table('students').run(conn, function(err, cursor) {
-          if (err) throw err;
-          cursor.toArray(function(err, result) {
-            if (err) throw err;
-            var i;
-            for (i = 0; i < 24; i++) {
-              var bal = result[i].balance;
-              console.log(result[i].name + " " + bal);
-              var newBal = bal+(result[i].income-result[i].pay);
-              console.log(result[i].name + " " + newBal);
-              console.log(result[i].name + " " + result[i].id);
-              console.log(i);
-
-              r.db('eraproject').table('students').get(result[i].id).update({balance:r.row("balance").add(newBal)}).run(conn, function(err, result) {
-                console.log("added $" + newBal + " to " + result[i].id);
-                pushBalance(result[i].id);
-              });
-            }
-          });
-        });
-      }*/
     });
   });
 });
